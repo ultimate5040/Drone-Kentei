@@ -1,0 +1,165 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap');
+  .dk-wrap { font-family: 'Noto Sans JP', sans-serif; padding: 1.5rem 0; }
+  .dk-header { text-align: center; margin-bottom: 2rem; }
+  .dk-title { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; letter-spacing: 0.12em; color: var(--color-text-primary); line-height: 1; margin: 0 0 4px; }
+  .dk-subtitle { font-size: 13px; color: var(--color-text-secondary); letter-spacing: 0.08em; font-family: 'Space Mono', monospace; }
+  .dk-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.5rem; border-bottom: 0.5px solid var(--color-border-tertiary); padding-bottom: 10px; }
+  .dk-tab { font-size: 12px; padding: 6px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); background: transparent; color: var(--color-text-secondary); cursor: pointer; font-family: 'Noto Sans JP', sans-serif; font-weight: 500; transition: background 0.15s; white-space: nowrap; }
+  .dk-tab:hover { background: var(--color-background-secondary); }
+  .dk-tab.active { background: var(--color-text-primary); color: var(--color-background-primary); border-color: var(--color-text-primary); }
+  .dk-panel { display: none; }
+  .dk-panel.active { display: block; }
+  .dk-section-label { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--color-text-secondary); letter-spacing: 0.1em; margin-bottom: 1rem; text-transform: uppercase; }
+  .dk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+  .dk-card { border-radius: var(--border-radius-lg); border: 0.5px solid var(--color-border-tertiary); padding: 14px 16px; background: var(--color-background-primary); position: relative; overflow: hidden; }
+  .dk-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; }
+  .dk-card.lv-entry::before { background: #B4B2A9; }
+  .dk-card.lv-basic::before { background: #5DCAA5; }
+  .dk-card.lv-mid::before { background: #378ADD; }
+  .dk-card.lv-adv::before { background: #EF9F27; }
+  .dk-card.lv-top::before { background: #D85A30; }
+  .dk-rank { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 0.05em; color: var(--color-text-primary); line-height: 1; margin-bottom: 4px; }
+  .dk-badge { display: inline-block; font-family: 'Space Mono', monospace; font-size: 10px; padding: 2px 8px; border-radius: 999px; margin-bottom: 8px; font-weight: 700; }
+  .dk-badge.lv-entry { background: #D3D1C7; color: #444441; }
+  .dk-badge.lv-basic { background: #9FE1CB; color: #085041; }
+  .dk-badge.lv-mid { background: #B5D4F4; color: #0C447C; }
+  .dk-badge.lv-adv { background: #FAC775; color: #633806; }
+  .dk-badge.lv-top { background: #F5C4B3; color: #4A1B0C; }
+  .dk-skill { font-size: 13px; color: var(--color-text-primary); line-height: 1.5; }
+  .dk-note { font-size: 11px; color: var(--color-text-secondary); margin-top: 6px; }
+  .dk-legend { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 1.5rem; }
+  .dk-leg-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--color-text-secondary); }
+  .dk-leg-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .dk-prog { margin-top: 1.5rem; padding: 14px 16px; background: var(--color-background-secondary); border-radius: var(--border-radius-lg); }
+  .dk-prog-title { font-size: 12px; font-family: 'Space Mono', monospace; color: var(--color-text-secondary); letter-spacing: 0.08em; margin-bottom: 10px; }
+  .dk-dan-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+  .dk-dan-card { border-radius: var(--border-radius-lg); border: 0.5px solid var(--color-border-tertiary); padding: 16px; background: var(--color-background-primary); display: flex; gap: 14px; align-items: flex-start; }
+  .dk-dan-num { font-family: 'Bebas Neue', sans-serif; font-size: 2.4rem; line-height: 1; flex-shrink: 0; width: 40px; text-align: center; }
+  .dk-dan-body { flex: 1; }
+  .dk-dan-label { font-size: 11px; font-family: 'Space Mono', monospace; color: var(--color-text-secondary); letter-spacing: 0.08em; margin-bottom: 4px; }
+  .dk-dan-req { font-size: 13px; line-height: 1.6; color: var(--color-text-primary); }
+  .dk-dan-cond { font-size: 11px; color: var(--color-text-secondary); margin-top: 4px; }
+  .dk-footer { margin-top: 2rem; padding-top: 1rem; border-top: 0.5px solid var(--color-border-tertiary); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; }
+  .dk-footer-left { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--color-text-secondary); }
+  .dk-footer-right { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--color-text-tertiary); }
+</style>
+
+<div class="dk-wrap">
+  <div class="dk-header">
+    <div class="dk-title">DRONE KENTEI</div>
+    <div class="dk-subtitle">学園内ドローン検定 — 技能ロードマップ</div>
+  </div>
+
+  <div class="dk-tabs">
+    <button class="dk-tab active" onclick="switchTab(0)">① FPV基礎</button>
+    <button class="dk-tab" onclick="switchTab(1)">② FPVレース</button>
+    <button class="dk-tab" onclick="switchTab(2)">③ フリースタイル</button>
+    <button class="dk-tab" onclick="switchTab(3)">④ 空撮</button>
+    <button class="dk-tab" onclick="switchTab(4)">⑤ 動画編集</button>
+  </div>
+
+  <div class="dk-panel active" id="panel-0">
+    <div class="dk-section-label">FPVドローン基礎 — 10級 → 1級</div>
+    <div class="dk-legend">
+      <div class="dk-leg-item"><div class="dk-leg-dot" style="background:#B4B2A9;"></div>入門</div>
+      <div class="dk-leg-item"><div class="dk-leg-dot" style="background:#5DCAA5;"></div>基礎</div>
+      <div class="dk-leg-item"><div class="dk-leg-dot" style="background:#378ADD;"></div>中級</div>
+      <div class="dk-leg-item"><div class="dk-leg-dot" style="background:#EF9F27;"></div>上級</div>
+      <div class="dk-leg-item"><div class="dk-leg-dot" style="background:#D85A30;"></div>マスター</div>
+    </div>
+    <div class="dk-grid">
+      <div class="dk-card lv-entry"><div class="dk-rank">10級</div><div class="dk-badge lv-entry">ENTRY</div><div class="dk-skill">ドローンの構造・各部品名称を説明できる</div><div class="dk-note">シミュレーター起動・基本設定ができる</div></div>
+      <div class="dk-card lv-entry"><div class="dk-rank">9級</div><div class="dk-badge lv-entry">ENTRY</div><div class="dk-skill">シミュレーターでホバリングを10秒以上維持できる</div><div class="dk-note">Betaflight / Velocidrone などを使用</div></div>
+      <div class="dk-card lv-entry"><div class="dk-rank">8級</div><div class="dk-badge lv-entry">ENTRY</div><div class="dk-skill">シミュレーターで前後左右・上下移動ができる</div><div class="dk-note">Acroモードで安定した姿勢制御</div></div>
+      <div class="dk-card lv-basic"><div class="dk-rank">7級</div><div class="dk-badge lv-basic">BASIC</div><div class="dk-skill">実機を安全に組み立て・モーター／プロペラ点検ができる</div><div class="dk-note">フライト前チェックリストを実施できる</div></div>
+      <div class="dk-card lv-basic"><div class="dk-rank">6級</div><div class="dk-badge lv-basic">BASIC</div><div class="dk-skill">実機でホバリングを5秒以上安定して維持できる</div><div class="dk-note">屋内フライトエリアにて実施</div></div>
+      <div class="dk-card lv-basic"><div class="dk-rank">5級</div><div class="dk-badge lv-basic">BASIC</div><div class="dk-skill">実機で前後左右・上下の基本移動ができる</div><div class="dk-note">墜落なしで往復コースを完走</div></div>
+      <div class="dk-card lv-mid"><div class="dk-rank">4級</div><div class="dk-badge lv-mid">MID</div><div class="dk-skill">実機で8の字飛行・旋回コースを安定して飛べる</div><div class="dk-note">ゲート1基を低速通過できる</div></div>
+      <div class="dk-card lv-mid"><div class="dk-rank">3級</div><div class="dk-badge lv-mid">MID</div><div class="dk-skill">ゲートを3基以上連続通過できる</div><div class="dk-note">決められたコース順を守って完走</div></div>
+      <div class="dk-card lv-adv"><div class="dk-rank">2級</div><div class="dk-badge lv-adv">ADVANCED</div><div class="dk-skill">規定コースを規定タイム内に完走できる</div><div class="dk-note">ゲート5基以上・タイムは部内基準による</div></div>
+      <div class="dk-card lv-top"><div class="dk-rank">1級</div><div class="dk-badge lv-top">MASTER</div><div class="dk-skill">後輩に安全管理・飛行技術を指導できる</div><div class="dk-note">コース安定完走 + 指導実績1件以上</div></div>
+    </div>
+  </div>
+
+  <div class="dk-panel" id="panel-1">
+    <div class="dk-section-label">FPVドローンレース — 1段 → 5段</div>
+    <div class="dk-dan-grid">
+      <div class="dk-dan-card"><div class="dk-dan-num" style="color:#B4B2A9;">1段</div><div class="dk-dan-body"><div class="dk-dan-label">RANK 1</div><div class="dk-dan-req">規定コースを5周ノーミスで完走できる</div><div class="dk-dan-cond">受験条件：基礎1級取得</div></div></div>
+      <div class="dk-dan-card"><div class="dk-dan-num" style="color:#5DCAA5;">2段</div><div class="dk-dan-body"><div class="dk-dan-label">RANK 2</div><div class="dk-dan-req">タイムトライアルで部内基準タイムをクリアできる</div><div class="dk-dan-cond">ラップタイム記録・提出あり</div></div></div>
+      <div class="dk-dan-card"><div class="dk-dan-num" style="color:#378ADD;">3段</div><div class="dk-dan-body"><div class="dk-dan-label">RANK 3</div><div class="dk-dan-req">部内レース大会に出場し完走できる</div><div class="dk-dan-cond">年1回以上開催の部内大会に参加</div></div></div>
+      <div class="dk-dan-card"><div class="dk-dan-num" style="color:#EF9F27;">4段</div><div class="dk-dan-body"><div class="dk-dan-label">RANK 4</div><div class="dk-dan-req">部内レース大会で3位以内に入賞できる</div><div class="dk-dan-cond">部員数6名以上の大会にて</div></div></div>
+      <div class="dk-dan-card"><div class="dk-dan-num" style="color:#D85A30;">5段</div><div class="dk-dan-body"><div class="dk-dan-label">RANK 5</div><div class="dk-dan-req">外部大会・オープンレースに出場し入賞できる</div><div class="dk-dan-cond">学外公式大会での成績証明が必要</div></div></div>
+    </div>
+  </div>
+
+  <div class="dk-panel" id="panel-2">
+    <div class="dk-section-label">FPVドローンフリースタイル — 1段 → 5段</div>
+    <div class="dk-dan-grid">
+      <div class="dk-dan-card"><div class="dk-dan-num" style="color:#B4B2A9;">1段</div><div class="dk-dan-body"><div class="dk-dan-label">RANK 1</div><div class="dk-dan-req">ロール・ピッチを使った基本トリックを3種類以上できる</div><div class="dk-dan-cond">受験条件：基礎1級取得</div></div></div>
+      <div class="dk-dan-card"><div class="dk-dan-num" style="color:#5DCAA5;">2段</div><div class="dk-dan-body"><div class="dk-dan-label">RANK 2</div><div class="dk-dan-req">異なる3種類のトリックをコンボで連続して繋げられる</div><div class="dk-dan-cond">30秒以内のコンボ動画を提出</div></div></div>
+      <div class="dk-dan-card"><div class="dk-dan-num" style="color:#378ADD;">3段</div><div class="dk-dan-body"><div class="dk-dan-label">RANK 3</div><div class="dk-dan-req">フリースタイルフライト動画を撮影・編集して提出できる</div><div class="dk-dan-cond">1分以上・BGMつきの完成動画</div></div></div>
+      <div class="dk-dan-card"><div class="dk-dan-num" style="color:#EF9F27;">4段</div><div class="dk-dan-body"><div class="dk-dan-label">RANK 4</div><div class="dk-dan-req">部内フリースタイルコンテストで上位に入賞できる</div><div class="dk-dan-cond">技術点・表現点の総合評価</div></div></div>
+      <div class="dk-dan-card"><div class="dk-dan-num" style="color:#D85A30;">5段</div><div class="dk-dan-body"><div class="dk-dan-label">RANK 5</div><div class="dk-dan-req">外部コンテスト・SNSでの作品公開・評価を得られる</div><div class="dk-dan-cond">公開作品URLまたは受賞証明を提出</div></div></div>
+    </div>
+  </div>
+
+  <div class="dk-panel" id="panel-3">
+    <div class="dk-section-label">空撮ドローン — 10級 → 1級</div>
+    <div class="dk-grid">
+      <div class="dk-card lv-entry"><div class="dk-rank">10級</div><div class="dk-badge lv-entry">ENTRY</div><div class="dk-skill">機体の種類・航空法・禁止空域の基礎知識がある</div><div class="dk-note">筆記テストで確認</div></div>
+      <div class="dk-card lv-entry"><div class="dk-rank">9級</div><div class="dk-badge lv-entry">ENTRY</div><div class="dk-skill">機体の組み立て・フライト前点検を手順通りに行える</div><div class="dk-note">チェックリストを使って実施</div></div>
+      <div class="dk-card lv-entry"><div class="dk-rank">8級</div><div class="dk-badge lv-entry">ENTRY</div><div class="dk-skill">GPSモードで自動ホバリング・RTH機能を使える</div><div class="dk-note">DJIなどのスマートモード</div></div>
+      <div class="dk-card lv-basic"><div class="dk-rank">7級</div><div class="dk-badge lv-basic">BASIC</div><div class="dk-skill">Pモードで前後左右・旋回の基本移動ができる</div><div class="dk-note">意図した地点への移動精度を評価</div></div>
+      <div class="dk-card lv-basic"><div class="dk-rank">6級</div><div class="dk-badge lv-basic">BASIC</div><div class="dk-skill">上空からの静止画撮影・基本構図を意識できる</div><div class="dk-note">三分割・水平・対称などの構図を使い分ける</div></div>
+      <div class="dk-card lv-basic"><div class="dk-rank">5級</div><div class="dk-badge lv-basic">BASIC</div><div class="dk-skill">パン・チルト・ドリーなど基本カメラワークができる</div><div class="dk-note">意図した動きで30秒以上の映像を撮れる</div></div>
+      <div class="dk-card lv-mid"><div class="dk-rank">4級</div><div class="dk-badge lv-mid">MID</div><div class="dk-skill">被写体追従・ポイントオブインタレストを使いこなせる</div><div class="dk-note">撮影対象に合わせてモードを選択・切替できる</div></div>
+      <div class="dk-card lv-mid"><div class="dk-rank">3級</div><div class="dk-badge lv-mid">MID</div><div class="dk-skill">意図した構成・ストーリーで5分以上の動画を撮影できる</div><div class="dk-note">ショットリストを事前に作成・実行</div></div>
+      <div class="dk-card lv-adv"><div class="dk-rank">2級</div><div class="dk-badge lv-adv">ADVANCED</div><div class="dk-skill">ウェイポイント飛行を設定・実行できる</div><div class="dk-note">自動飛行ルートを設計し安全に完遂</div></div>
+      <div class="dk-card lv-top"><div class="dk-rank">1級</div><div class="dk-badge lv-top">MASTER</div><div class="dk-skill">映像作品として完成した動画を制作・発表できる</div><div class="dk-note">部内・外部発表会での上映 + 解説ができる</div></div>
+    </div>
+  </div>
+
+  <div class="dk-panel" id="panel-4">
+    <div class="dk-section-label">ドローン映像 動画編集 — 10級 → 1級</div>
+    <div class="dk-grid">
+      <div class="dk-card lv-entry"><div class="dk-rank">10級</div><div class="dk-badge lv-entry">ENTRY</div><div class="dk-skill">編集ソフトを起動し、映像ファイルを読み込める</div><div class="dk-note">DaVinci Resolve / Premiere Pro など</div></div>
+      <div class="dk-card lv-entry"><div class="dk-rank">9級</div><div class="dk-badge lv-entry">ENTRY</div><div class="dk-skill">カット・トリム・並べ替えの基本編集ができる</div><div class="dk-note">タイムライン上で10クリップ以上を編集</div></div>
+      <div class="dk-card lv-entry"><div class="dk-rank">8級</div><div class="dk-badge lv-entry">ENTRY</div><div class="dk-skill">BGM・効果音を映像に合わせて配置できる</div><div class="dk-note">音量バランスを調整して書き出せる</div></div>
+      <div class="dk-card lv-basic"><div class="dk-rank">7級</div><div class="dk-badge lv-basic">BASIC</div><div class="dk-skill">テロップ・タイトル文字を見やすく入れられる</div><div class="dk-note">フォント・配色・サイズを意識する</div></div>
+      <div class="dk-card lv-basic"><div class="dk-rank">6級</div><div class="dk-badge lv-basic">BASIC</div><div class="dk-skill">カラーグレーディングの基本補正ができる</div><div class="dk-note">露出・コントラスト・色温度の調整</div></div>
+      <div class="dk-card lv-basic"><div class="dk-rank">5級</div><div class="dk-badge lv-basic">BASIC</div><div class="dk-skill">トランジション・モーションエフェクトを効果的に使える</div><div class="dk-note">多用せず映像のリズムに合わせて配置</div></div>
+      <div class="dk-card lv-mid"><div class="dk-rank">4級</div><div class="dk-badge lv-mid">MID</div><div class="dk-skill">2分以上の完成作品を制作・書き出しできる</div><div class="dk-note">テーマ・ストーリー性のある構成で</div></div>
+      <div class="dk-card lv-mid"><div class="dk-rank">3級</div><div class="dk-badge lv-mid">MID</div><div class="dk-skill">ドローン映像のスピード感・ダイナミクスを活かした編集ができる</div><div class="dk-note">音楽ビートに合わせたカット編集</div></div>
+      <div class="dk-card lv-adv"><div class="dk-rank">2級</div><div class="dk-badge lv-adv">ADVANCED</div><div class="dk-skill">色彩・音響・演出を統合した映像作品を制作できる</div><div class="dk-note">LUTの自作または応用グレーディング</div></div>
+      <div class="dk-card lv-top"><div class="dk-rank">1級</div><div class="dk-badge lv-top">MASTER</div><div class="dk-skill">外部公開・コンテスト出品できる水準の作品を制作できる</div><div class="dk-note">YouTube公開 or 外部コンテスト応募実績</div></div>
+    </div>
+  </div>
+
+  <div class="dk-prog">
+    <div class="dk-prog-title">PROGRESSION GUIDE — 推奨取得順</div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap; font-size:12px; color:var(--color-text-secondary); align-items:center;">
+      <span>FPV基礎 10→1級</span>
+      <span style="color:var(--color-text-tertiary);">→</span>
+      <span>空撮 10→1級 / 動画編集 10→1級</span>
+      <span style="color:var(--color-text-tertiary);">→</span>
+      <span>FPVレース 1→5段</span>
+      <span style="color:var(--color-text-tertiary);">/</span>
+      <span>フリースタイル 1→5段</span>
+    </div>
+    <div style="margin-top:8px; font-size:11px; color:var(--color-text-secondary);">レース・フリースタイルの段位受験にはFPV基礎1級が必須。他部門は並行取得可能。</div>
+  </div>
+
+  <div class="dk-footer">
+    <div class="dk-footer-left">&copy; Setagaya Gakuen. All rights reserved.</div>
+    <div class="dk-footer-right">Created by Koyo Ito</div>
+  </div>
+</div>
+
+<script>
+function switchTab(idx) {
+  document.querySelectorAll('.dk-tab').forEach((t,i)=>t.classList.toggle('active',i===idx));
+  document.querySelectorAll('.dk-panel').forEach((p,i)=>p.classList.toggle('active',i===idx));
+}
+</script>
