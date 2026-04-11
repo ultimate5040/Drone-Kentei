@@ -171,19 +171,110 @@
     .dk-card.lv-top::before    { background: #D85A30; }
 
     .dk-card.obtained {
-      background: var(--bg-secondary);
-      border-color: transparent;
+      background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg) 100%);
+      border-color: rgba(93, 202, 165, 0.35);
+      box-shadow: 0 0 0 1px rgba(93, 202, 165, 0.1), 0 2px 8px rgba(93, 202, 165, 0.08);
     }
-    .dk-card.obtained .dk-skill { color: var(--text-secondary); }
+    .dk-card.obtained .dk-skill {
+      color: var(--text-secondary);
+      text-decoration: line-through;
+      text-decoration-color: var(--text-tertiary);
+    }
     .dk-card.obtained::after {
-      content: '取得済み ✓';
+      content: '取得済み';
       position: absolute;
-      top: 10px; right: 10px;
-      font-family: 'Space Mono', monospace;
-      font-size: 9px;
+      top: 8px; right: 8px;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 10px;
       font-weight: 700;
-      letter-spacing: 0.05em;
-      color: var(--text-tertiary);
+      letter-spacing: 0.04em;
+      color: #fff;
+      background: linear-gradient(135deg, #5DCAA5, #3DAF8A);
+      padding: 3px 10px;
+      border-radius: 999px;
+      box-shadow: 0 2px 6px rgba(93, 202, 165, 0.3);
+    }
+    .dk-card.obtained .dk-badge {
+      opacity: 0.5;
+    }
+
+    /* Achievement animation */
+    @keyframes dk-bounce-in {
+      0%   { transform: scale(1); }
+      20%  { transform: scale(0.95); }
+      50%  { transform: scale(1.05); }
+      80%  { transform: scale(0.98); }
+      100% { transform: scale(1); }
+    }
+    @keyframes dk-shimmer {
+      0%   { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+    @keyframes dk-check-pop {
+      0%   { transform: scale(0) rotate(-45deg); opacity: 0; }
+      50%  { transform: scale(1.3) rotate(0deg); opacity: 1; }
+      100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+    @keyframes dk-particle {
+      0%   { transform: translate(0, 0) scale(1); opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    .dk-card.dk-just-obtained,
+    .dk-dan-card.dk-just-obtained {
+      animation: dk-bounce-in 0.5s ease;
+    }
+    .dk-card.dk-just-obtained::before,
+    .dk-dan-card.dk-just-obtained .dk-dan-num {
+      animation: dk-shimmer 0.8s ease;
+      background-size: 200% 100%;
+    }
+
+    /* Shimmer overlay for newly obtained */
+    .dk-shimmer-overlay {
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 215, 0, 0.15) 40%,
+        rgba(255, 215, 0, 0.3) 50%,
+        rgba(255, 215, 0, 0.15) 60%,
+        transparent 100%
+      );
+      background-size: 200% 100%;
+      animation: dk-shimmer 0.8s ease forwards;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* Particle burst */
+    .dk-particle {
+      position: fixed;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      animation: dk-particle 0.7s ease-out forwards;
+    }
+
+    /* Large check icon overlay */
+    .dk-check-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      z-index: 3;
+    }
+    .dk-check-overlay svg {
+      width: 48px;
+      height: 48px;
+      animation: dk-check-pop 0.5s ease forwards;
+      filter: drop-shadow(0 2px 8px rgba(93, 202, 165, 0.5));
     }
 
     .dk-rank {
@@ -241,19 +332,28 @@
     }
     .dk-dan-card:active { opacity: 0.75; }
     .dk-dan-card.obtained {
-      background: var(--bg-secondary);
-      border-color: transparent;
+      background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg) 100%);
+      border-color: rgba(93, 202, 165, 0.35);
+      box-shadow: 0 0 0 1px rgba(93, 202, 165, 0.1), 0 2px 8px rgba(93, 202, 165, 0.08);
     }
-    .dk-dan-card.obtained .dk-dan-req { color: var(--text-secondary); }
+    .dk-dan-card.obtained .dk-dan-req {
+      color: var(--text-secondary);
+      text-decoration: line-through;
+      text-decoration-color: var(--text-tertiary);
+    }
     .dk-dan-card.obtained::after {
-      content: '取得済み ✓';
+      content: '取得済み';
       position: absolute;
       top: 10px; right: 12px;
-      font-family: 'Space Mono', monospace;
-      font-size: 9px;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 10px;
       font-weight: 700;
-      letter-spacing: 0.05em;
-      color: var(--text-tertiary);
+      letter-spacing: 0.04em;
+      color: #fff;
+      background: linear-gradient(135deg, #5DCAA5, #3DAF8A);
+      padding: 3px 10px;
+      border-radius: 999px;
+      box-shadow: 0 2px 6px rgba(93, 202, 165, 0.3);
     }
     .dk-dan-num {
       font-family: 'Bebas Neue', sans-serif;
@@ -529,11 +629,70 @@
       });
     }
 
+    function createParticles(el) {
+      const rect = el.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const colors = ['#5DCAA5', '#FFD700', '#378ADD', '#EF9F27', '#D85A30', '#F5C4B3'];
+      for (let i = 0; i < 12; i++) {
+        const p = document.createElement('div');
+        p.className = 'dk-particle';
+        const angle = (Math.PI * 2 * i) / 12;
+        const dist = 40 + Math.random() * 50;
+        const dx = Math.cos(angle) * dist;
+        const dy = Math.sin(angle) * dist;
+        p.style.left = cx + 'px';
+        p.style.top = cy + 'px';
+        p.style.background = colors[i % colors.length];
+        p.style.width = (4 + Math.random() * 4) + 'px';
+        p.style.height = p.style.width;
+        p.style.setProperty('--dx', dx + 'px');
+        p.style.setProperty('--dy', dy + 'px');
+        p.animate([
+          { transform: 'translate(0, 0) scale(1)', opacity: 1 },
+          { transform: `translate(${dx}px, ${dy}px) scale(0)`, opacity: 0 }
+        ], { duration: 600 + Math.random() * 200, easing: 'ease-out', fill: 'forwards' });
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 900);
+      }
+    }
+
+    function showCheckOverlay(el) {
+      const overlay = document.createElement('div');
+      overlay.className = 'dk-check-overlay';
+      overlay.innerHTML = `<svg viewBox="0 0 48 48" fill="none">
+        <circle cx="24" cy="24" r="22" fill="rgba(93,202,165,0.15)" stroke="#5DCAA5" stroke-width="2"/>
+        <path d="M14 24.5L21 31.5L34 17.5" stroke="#5DCAA5" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>`;
+      el.appendChild(overlay);
+      setTimeout(() => overlay.remove(), 800);
+    }
+
+    function showShimmer(el) {
+      const shimmer = document.createElement('div');
+      shimmer.className = 'dk-shimmer-overlay';
+      el.appendChild(shimmer);
+      setTimeout(() => shimmer.remove(), 900);
+    }
+
+    function playObtainEffect(el) {
+      el.classList.add('dk-just-obtained');
+      createParticles(el);
+      showCheckOverlay(el);
+      showShimmer(el);
+      setTimeout(() => el.classList.remove('dk-just-obtained'), 600);
+    }
+
     function toggleCard(id) {
       const state = loadState();
+      const wasObtained = !!state[id];
       state[id] = !state[id];
       saveState(state);
       updateProgress();
+      if (!wasObtained) {
+        const el = document.querySelector(`[data-id="${id}"]`);
+        if (el) playObtainEffect(el);
+      }
     }
 
     function switchTab(idx) {
